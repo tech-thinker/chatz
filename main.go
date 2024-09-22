@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tech-thinker/chat/agents"
-	"github.com/tech-thinker/chat/utils"
+	"github.com/tech-thinker/chatz/agents"
+	"github.com/tech-thinker/chatz/utils"
 	"github.com/urfave/cli/v2"
 )
 
@@ -28,7 +28,7 @@ func main() {
             Name: "profile",
             Aliases: []string{"p"},
             Value: "default",
-            Usage: "Profile from .schat.ini",
+            Usage: "Profile from .schatz.ini",
             Destination: &profile,
         },
         &cli.StringFlag{

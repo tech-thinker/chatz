@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/tech-thinker/chat/config"
+	"github.com/tech-thinker/chatz/config"
 )
 
 type slackAgent struct {
@@ -26,7 +26,7 @@ func (agent *slackAgent) Post(message string) (interface{}, error) {
 	req, _ := http.NewRequest("POST", url, payload)
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("User-Agent", "tech-thinker/chat")
+	req.Header.Add("User-Agent", "tech-thinker/chatz")
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", agent.config.SlackToken))
 
 	res, err := http.DefaultClient.Do(req)
@@ -52,7 +52,7 @@ func (agent *slackAgent) Reply(threadId string, message string) (interface{}, er
 	req, _ := http.NewRequest("POST", url, payload)
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("User-Agent", "tech-thinker/chat")
+	req.Header.Add("User-Agent", "tech-thinker/chatz")
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", agent.config.SlackToken))
 
 	res, err := http.DefaultClient.Do(req)

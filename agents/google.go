@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/tech-thinker/chat/config"
+	"github.com/tech-thinker/chatz/config"
 )
 
 type googleAgent struct {
@@ -26,7 +26,7 @@ func (agent *googleAgent) Post(message string) (interface{}, error) {
 	req, _ := http.NewRequest("POST", url, payload)
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("User-Agent", "tech-thinker/chat")
+	req.Header.Add("User-Agent", "tech-thinker/chatz")
 
 	res, err := http.DefaultClient.Do(req)
     if err!=nil {
@@ -51,7 +51,7 @@ func (agent *googleAgent) Reply(threadId string, message string) (interface{}, e
 	req, _ := http.NewRequest("POST", url, payload)
 
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("User-Agent", "tech-thinker/chat")
+	req.Header.Add("User-Agent", "tech-thinker/chatz")
 
 	res, err := http.DefaultClient.Do(req)
     if err!=nil {

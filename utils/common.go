@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/viper"
-	"github.com/tech-thinker/chat/config"
+	"github.com/tech-thinker/chatz/config"
 )
 
 
@@ -19,7 +19,7 @@ func LoadEnv(profile string) (*config.Config, error) {
     }
 
     // Set the configuration file path
-    configPath := filepath.Join(homeDir, ".chat.ini")
+    configPath := filepath.Join(homeDir, ".chatz.ini")
 
     // Set the file name and type
     viper.SetConfigFile(configPath) // full path to the config file
