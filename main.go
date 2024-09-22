@@ -13,10 +13,17 @@ func main() {
     
     var profile string
     var threadId string
+    var output bool
 
     app := cli.NewApp()
     app.Name = "Chat"
     app.Flags = []cli.Flag {
+        &cli.BoolFlag{
+            Name: "output",
+            Aliases: []string{"o"},
+            Usage: "Print output to stdout",
+            Destination: &output,
+        },
         &cli.StringFlag{
             Name: "profile",
             Aliases: []string{"p"},
@@ -63,11 +70,15 @@ func main() {
 
         if len(threadId) > 0 {
             res, _ := agent.Reply(threadId, message)
-            fmt.Println(res)
+            if output {
+                fmt.Println(res)
+            }
             return nil
         }
         res, _ := agent.Post(message)
-        fmt.Println(res)
+        if output {
+            fmt.Println(res)
+        }
 
         return nil
     }

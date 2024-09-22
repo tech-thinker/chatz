@@ -73,6 +73,11 @@ chat --provider=google "hello"
 chat --provider=google -t="<thread-id>" "Hello"
 ```
 
+- See output
+```sh
+chat -o "Hi"
+```
+
 - See help
 ```sh
 chat --help
