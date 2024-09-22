@@ -1,8 +1,28 @@
 # chat
 Chat is a cli application that allows you to send messages to google and slack.
 
-## Install
-Download binaries from github release and then install.
+## Installation
+Download and install executable binary from GitHub releases page.
+
+### Linux Installation
+```sh
+curl -sL https://github.com/tech-thinker/chat/releases/download/v1.0.0/chat-linux-amd64 -o chat
+chmod +x chat
+sudo mv chat /usr/bin
+```
+
+### MacOS Installation
+```sh
+curl -sL https://github.com/tech-thinker/chat/releases/download/v1.0.0/chat-darwin-amd64 -o chat
+chmod +x chat
+sudo mv chat /usr/bin
+```
+
+### Windows Installation
+```sh
+curl -sL https://github.com/tech-thinker/chat/releases/download/v1.0.0/chat-windows-amd64.exe -o chat.exe
+chat.exe
+```
 
 ## Setup
 - Create config file at home directory. `.chat.ini`
