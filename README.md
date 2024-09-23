@@ -18,13 +18,13 @@
 
 With chatz, you can streamline your notification processes across multiple platforms, making it an essential tool for developers, system administrators, and teams that need reliable communication for automated tasks.
 
-![Screenshot](https://github.com/tech-thinker/chatz/raw/main/docs/Screenshot.png)
+![Screenshot](docs/screenshot.png)
 
 ### Supported Providers
-- Slack
-- Google Chat
-- Telegram
-- Discord
+- Slack: [Read documentation](docs/slack.md)
+- Google Chat: [Read documentation](docs/google.md)
+- Telegram: [Read documentation](docs/telegram.md)
+- Discord: [Read documentation](docs/discord.md)
 
 ## Installation
 Download and install executable binary from GitHub releases page.
