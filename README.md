@@ -23,25 +23,24 @@ With chatz, you can streamline your notification processes across multiple platf
 
 ## Installation
 Download and install executable binary from GitHub releases page.
-Note: Use release version instead of `v1.0.0` if you want to use latest stable version.
 
 ### Linux Installation
 ```sh
-curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.0.0/chatz-linux-amd64 -o chatz
+curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.0/chatz-linux-amd64 -o chatz
 chmod +x chatz
 sudo mv chatz /usr/bin
 ```
 
 ### MacOS Installation
 ```sh
-curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.0.0/chatz-darwin-amd64 -o chatz
+curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.0/chatz-darwin-amd64 -o chatz
 chmod +x chatz
 sudo mv chatz /usr/bin
 ```
 
 ### Windows Installation
 ```sh
-curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.0.0/chatz-windows-amd64.exe -o chatz.exe
+curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.0/chatz-windows-amd64.exe -o chatz.exe
 chatz.exe
 ```
 
