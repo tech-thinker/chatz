@@ -1,4 +1,4 @@
-package agents
+package providers
 
 import (
 	"fmt"
@@ -9,19 +9,16 @@ import (
 	"github.com/tech-thinker/chatz/config"
 )
 
-type telegramAgent struct {
+type googleProvider struct {
     config *config.Config
 }
 
-func (agent *telegramAgent) Post(message string) (interface{}, error) {
-    url := fmt.Sprintf(
-        `https://api.telegram.org/bot%s/sendMessage`,
-        agent.config.TelegramBotToken,
-        )
+func (agent *googleProvider) Post(message string) (interface{}, error) {
+    url := agent.config.WebHookURL
 
 	payloadStr := fmt.Sprintf(
-            `{"chat_id": "%s","text": "%s"}`,
-            agent.config.TelegramChatId, message,
+            `{"text": "%s"}`,
+            message,
         )
 
     payload := strings.NewReader(payloadStr)
@@ -41,15 +38,12 @@ func (agent *telegramAgent) Post(message string) (interface{}, error) {
     return string(body), err
 }
 
-func (agent *telegramAgent) Reply(threadId string, message string) (interface{}, error) {
-    url := fmt.Sprintf(
-        `https://api.telegram.org/bot%s/sendMessage`,
-        agent.config.TelegramBotToken,
-        )
+func (agent *googleProvider) Reply(threadId string, message string) (interface{}, error) {
+    url := fmt.Sprintf("%s&messageReplyOption=REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",agent.config.WebHookURL)
 
 	payloadStr := fmt.Sprintf(
-            `{"chat_id": "%s", "text": "%s", "reply_to_message_id": "%s"}`,
-            agent.config.TelegramChatId, message, threadId,
+            `{"text": "%s", "thread": {"name": "%s"}}`,
+            message, threadId,
         )
 
     payload := strings.NewReader(payloadStr)
@@ -69,6 +63,6 @@ func (agent *telegramAgent) Reply(threadId string, message string) (interface{},
     return string(body), err
 }
 
-func NewTelegramAgent(config *config.Config) Agent {
-    return &telegramAgent{config: config}
+func NewGoogleProvider(config *config.Config) Provider {
+    return &googleProvider{config: config}
 }
