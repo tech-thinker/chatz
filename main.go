@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tech-thinker/chatz/constants"
 	"github.com/tech-thinker/chatz/providers"
 	"github.com/tech-thinker/chatz/utils"
 	"github.com/urfave/cli/v2"
@@ -80,19 +79,10 @@ func main() {
         if err!=nil {
             return nil
         }
-        var provider providers.Provider
-        switch env.Provider {
-            case constants.PROVIDER_SLACK:
-                provider = providers.NewSlackProvider(env)
-            case constants.PROVIDER_GOOGLE:
-                provider = providers.NewGoogleProvider(env)
-            case constants.PROVIDER_TELEGRAM:
-                provider = providers.NewTelegramProvider(env)
-            case constants.PROVIDER_DISCORD:
-                provider = providers.NewDiscordProvider(env)
-            default:
-                fmt.Println("No valid provider. Please choose from [slack, google, telegram, discord].")
-                return nil
+        provider, err := providers.NewProvider(env)
+        if err!=nil {
+            fmt.Println(err.Error())
+            return nil
         }
 
         if len(threadId) > 0 {

@@ -9,11 +9,11 @@ import (
 	"github.com/tech-thinker/chatz/config"
 )
 
-type slackProvider struct {
+type SlackProvider struct {
     config *config.Config
 }
 
-func (agent *slackProvider) Post(message string) (interface{}, error) {
+func (agent *SlackProvider) Post(message string) (interface{}, error) {
     url := "https://slack.com/api/chat.postMessage"
 
 	payloadStr := fmt.Sprintf(
@@ -39,7 +39,7 @@ func (agent *slackProvider) Post(message string) (interface{}, error) {
     return string(body), err
 }
 
-func (agent *slackProvider) Reply(threadId string, message string) (interface{}, error) {
+func (agent *SlackProvider) Reply(threadId string, message string) (interface{}, error) {
     url := "https://slack.com/api/chat.postMessage"
 
 	payloadStr := fmt.Sprintf(
@@ -65,6 +65,3 @@ func (agent *slackProvider) Reply(threadId string, message string) (interface{},
     return string(body), err
 }
 
-func NewSlackProvider(config *config.Config) Provider {
-    return &slackProvider{config: config}
-}

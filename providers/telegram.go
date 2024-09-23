@@ -9,11 +9,11 @@ import (
 	"github.com/tech-thinker/chatz/config"
 )
 
-type telegramProvider struct {
+type TelegramProvider struct {
     config *config.Config
 }
 
-func (agent *telegramProvider) Post(message string) (interface{}, error) {
+func (agent *TelegramProvider) Post(message string) (interface{}, error) {
     url := fmt.Sprintf(
         `https://api.telegram.org/bot%s/sendMessage`,
         agent.config.Token,
@@ -41,7 +41,7 @@ func (agent *telegramProvider) Post(message string) (interface{}, error) {
     return string(body), err
 }
 
-func (agent *telegramProvider) Reply(threadId string, message string) (interface{}, error) {
+func (agent *TelegramProvider) Reply(threadId string, message string) (interface{}, error) {
     url := fmt.Sprintf(
         `https://api.telegram.org/bot%s/sendMessage`,
         agent.config.Token,
@@ -67,8 +67,4 @@ func (agent *telegramProvider) Reply(threadId string, message string) (interface
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
     return string(body), err
-}
-
-func NewTelegramProvider(config *config.Config) Provider {
-    return &telegramProvider{config: config}
 }

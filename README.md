@@ -11,7 +11,7 @@
 <!-- ![GitHub pull requests](https://img.shields.io/github/issues-pr/tech-thinker/chatz) -->
 <!-- ![Coverage](https://img.shields.io/codecov/c/github/tech-thinker/chatz) -->
 
-*Chatz* is an open-source application designed to send messages to popular communication platforms like Google Chat, Slack, Discord and Telegram. Whether you're monitoring server health, tracking job completions, or needing a quick notification tool, Chatz offers a unified way to communicate with your teams and devices, such as:
+*Chatz* is an open-source application designed to send messages to popular communication platforms like Google Chat, Slack, Discord and Telegram etc. Whether you're monitoring server health, tracking job completions, or needing a quick notification tool, Chatz offers a unified way to communicate with your teams and devices, such as:
 
 - Event Notifications: Automatically notify users of events occurring in background jobs, system processes, or application workflows.
 - Alerts : Integrate with script to alert teams of system status changes, errors, or other critical updates.
@@ -20,6 +20,11 @@ With chatz, you can streamline your notification processes across multiple platf
 
 ![Screenshot](https://github.com/tech-thinker/chatz/raw/main/docs/Screenshot.png)
 
+### Supported Providers
+- Slack
+- Google Chat
+- Telegram
+- Discord
 
 ## Installation
 Download and install executable binary from GitHub releases page.
