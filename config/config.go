@@ -6,4 +6,6 @@ type Config struct {
     SlackToken string
     SlackChannelId string
     GoogleWebHookURL string
+    TelegramBotToken string
+    TelegramChatId string
 }

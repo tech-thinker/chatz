@@ -1,8 +1,29 @@
 # chatz
-Chatz is a cli application that allows you to send messages to google and slack.
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/tech-thinker/chatz)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/tech-thinker/chatz/release.yaml)
+![GitHub](https://img.shields.io/github/license/tech-thinker/chatz)
+![GitHub All Releases](https://img.shields.io/github/downloads/tech-thinker/chatz/total)
+![GitHub last commit](https://img.shields.io/github/last-commit/tech-thinker/chatz)
+![GitHub forks](https://img.shields.io/github/forks/tech-thinker/chatz)
+![GitHub top language](https://img.shields.io/github/languages/top/tech-thinker/chatz)
+
+<!-- ![GitHub contributors](https://img.shields.io/github/contributors/tech-thinker/chatz) -->
+<!-- ![GitHub pull requests](https://img.shields.io/github/issues-pr/tech-thinker/chatz) -->
+<!-- ![Coverage](https://img.shields.io/codecov/c/github/tech-thinker/chatz) -->
+
+`chatz` is a versatile messaging app designed to send notifications to Google Chat, Slack, and Telegram. It provides a unified interface to automate messaging for various use cases, such as:
+
+- Event Notifications: Automatically notify users of events occurring in background jobs, system processes, or application workflows.
+- Alerts : Integrate with script to alert teams of system status changes, errors, or other critical updates.
+
+With chatz, you can streamline your notification processes across multiple platforms, making it an essential tool for developers, system administrators, and teams that need reliable communication for automated tasks.
+
+![Screenshot](https://github.com/tech-thinker/chatz/raw/main/docs/Screenshot.png)
+
 
 ## Installation
 Download and install executable binary from GitHub releases page.
+Note: Use release version instead of `v1.0.0` if you want to use latest stable version.
 
 ### Linux Installation
 ```sh
@@ -29,48 +50,57 @@ chatz.exe
 ```ini
 [default]
 PROVIDER=slack
-SLACK_TOKEN=
-CHANNEL_ID=
+SLACK_TOKEN=<token>
+CHANNEL_ID=<one-channel-id>
 
-[slack]
+[another]
 PROVIDER=slack
-SLACK_TOKEN=
-CHANNEL_ID=
+SLACK_TOKEN=<token>
+CHANNEL_ID=<another-channel-id>
+```
 
-[google]
+- Config for slack provider
+```ini
+[default]
+PROVIDER=slack
+SLACK_TOKEN=<token>
+CHANNEL_ID=<channel-id>
+```
+
+- Config for google provider
+```ini
+[default]
 PROVIDER=google
-WEB_HOOK_URL=
+WEB_HOOK_URL=<webhook-url>
+```
+
+- Config for telegram provider
+```ini
+[default]
+PROVIDER=telegram
+TELEGRAM_BOT_TOKEN=<bot-token>
+TELEGRAM_CHAT_ID=<chat-id>
 ```
 
 ## Usage
-- Send message using default provider
+- Send message using `default` profile
 ```sh
 chatz "hello"
 ```
 
-- Reply message using default provider
+- Reply message using `default` profile
 ```sh
 chatz -t="<thread-id>" "Hello"
 ```
 
-- Send message using slack provider
+- Send message using `another` profile
 ```sh
-chatz --provider=slack "hello"
+chatz --profile=another "hello"
 ```
 
-- Reply message using slack provider
+- Reply message using `another` profile
 ```sh
-chatz --provider=slack -t="<thread-id>" "Hello"
-```
-
-- Send message using google provider
-```sh
-chatz --provider=google "hello"
-```
-
-- Reply message using google provider
-```sh
-chatz --provider=google -t="<thread-id>" "Hello"
+chatz --profile=another -t="<thread-id>" "Hello"
 ```
 
 - See output

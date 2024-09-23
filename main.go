@@ -9,14 +9,22 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+var (
+    AppVersion = "v0.0.1"
+    CommitHash = "unknown"
+    BuildDate = "unknown"
+)
+
 func main() {
     
+    var version bool
     var profile string
     var threadId string
     var output bool
 
     app := cli.NewApp()
-    app.Name = "Chat"
+    app.Name = "chatz"
+    app.Description = "chatz is a versatile messaging app designed to send notifications to Google Chat, Slack, and Telegram."
     app.Flags = []cli.Flag {
         &cli.BoolFlag{
             Name: "output",
@@ -28,7 +36,7 @@ func main() {
             Name: "profile",
             Aliases: []string{"p"},
             Value: "default",
-            Usage: "Profile from .schatz.ini",
+            Usage: "Profile from .chatz.ini",
             Destination: &profile,
         },
         &cli.StringFlag{
@@ -38,8 +46,22 @@ func main() {
             Usage: "Thread ID for reply to a message",
             Destination: &threadId,
         },
+        &cli.BoolFlag{
+            Name: "version",
+            Aliases: []string{"v"},
+            Usage: "Print the version number",
+            Destination: &version,
+        },
     }
     app.Action = func(ctx *cli.Context) error {
+        if version {
+            fmt.Println("chatz version: ", AppVersion)
+            fmt.Println("Commit Hash: ", CommitHash)
+            fmt.Println("Build Date: ", BuildDate)
+            return nil
+        }
+
+
         var message string
         if ctx.Args().Len() == 0 {
             fmt.Println("Please provide a message.")
@@ -63,8 +85,10 @@ func main() {
                 agent = agents.NewSlackAgent(env)
             case "google":
                 agent = agents.NewGoogleAgent(env)
+            case "telegram":
+                agent = agents.NewTelegramAgent(env)
             default:
-                fmt.Println("No valid provider. Please choose from [slack, google].")
+                fmt.Println("No valid provider. Please choose from [slack, google, telegram].")
                 return nil
         }
 

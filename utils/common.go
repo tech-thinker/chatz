@@ -37,36 +37,18 @@ func LoadEnv(profile string) (*config.Config, error) {
     slackToken := viper.GetString(fmt.Sprintf("%s.SLACK_TOKEN", profile))
     channelId := viper.GetString(fmt.Sprintf("%s.CHANNEL_ID", profile))
     googleWebHookURL := viper.GetString(fmt.Sprintf("%s.WEB_HOOK_URL", profile))
+    telegramBotToken := viper.GetString(fmt.Sprintf("%s.TELEGRAM_BOT_TOKEN", profile))
+    telegramChatId := viper.GetString(fmt.Sprintf("%s.TELEGRAM_CHAT_ID", profile))
+
 
     var env config.Config
     env.Provider = provider
     env.SlackToken = slackToken
     env.SlackChannelId = channelId
     env.GoogleWebHookURL = googleWebHookURL
+    env.TelegramBotToken = telegramBotToken
+    env.TelegramChatId = telegramChatId
 
     return &env, nil
 }
 
-func generateDefaultConfig(configPath string) {
-    config := `[default]
-PROVIDER=slack
-SLACK_TOKEN=
-CHANNEL_ID=
-
-[slack]
-PROVIDER=slack
-SLACK_TOKEN=
-CHANNEL_ID=
-
-[google]
-PROVIDER=google
-WEB_HOOK_URL=
-`
-    f, err := os.Create(configPath)
-    if err != nil {
-        fmt.Println(err)
-        return
-    }
-    defer f.Close()
-    f.WriteString(config)
-}
