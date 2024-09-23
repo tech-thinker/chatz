@@ -11,7 +11,7 @@
 <!-- ![GitHub pull requests](https://img.shields.io/github/issues-pr/tech-thinker/chatz) -->
 <!-- ![Coverage](https://img.shields.io/codecov/c/github/tech-thinker/chatz) -->
 
-`chatz` is a versatile messaging app designed to send notifications to Google Chat, Slack, and Telegram. It provides a unified interface to automate messaging for various use cases, such as:
+*Chatz* is an open-source application designed to send messages to popular communication platforms like Google Chat, Slack, Discord and Telegram. Whether you're monitoring server health, tracking job completions, or needing a quick notification tool, Chatz offers a unified way to communicate with your teams and devices, such as:
 
 - Event Notifications: Automatically notify users of events occurring in background jobs, system processes, or application workflows.
 - Alerts : Integrate with script to alert teams of system status changes, errors, or other critical updates.
@@ -50,12 +50,12 @@ chatz.exe
 ```ini
 [default]
 PROVIDER=slack
-SLACK_TOKEN=<token>
+TOKEN=<token>
 CHANNEL_ID=<one-channel-id>
 
 [another]
 PROVIDER=slack
-SLACK_TOKEN=<token>
+TOKEN=<token>
 CHANNEL_ID=<another-channel-id>
 ```
 
@@ -63,7 +63,7 @@ CHANNEL_ID=<another-channel-id>
 ```ini
 [default]
 PROVIDER=slack
-SLACK_TOKEN=<token>
+TOKEN=<token>
 CHANNEL_ID=<channel-id>
 ```
 
@@ -78,8 +78,15 @@ WEB_HOOK_URL=<webhook-url>
 ```ini
 [default]
 PROVIDER=telegram
-TELEGRAM_BOT_TOKEN=<bot-token>
-TELEGRAM_CHAT_ID=<chat-id>
+TOKEN=<bot-token>
+CHAT_ID=<chat-id>
+```
+
+- Config for discord provider
+```ini
+[default]
+PROVIDER=discord
+WEB_HOOK_URL=<webhook-url>
 ```
 
 ## Usage

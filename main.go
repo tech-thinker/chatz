@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tech-thinker/chatz/agents"
+	"github.com/tech-thinker/chatz/constants"
+	"github.com/tech-thinker/chatz/providers"
 	"github.com/tech-thinker/chatz/utils"
 	"github.com/urfave/cli/v2"
 )
@@ -79,27 +80,29 @@ func main() {
         if err!=nil {
             return nil
         }
-        var agent agents.Agent
+        var provider providers.Provider
         switch env.Provider {
-            case "slack":
-                agent = agents.NewSlackAgent(env)
-            case "google":
-                agent = agents.NewGoogleAgent(env)
-            case "telegram":
-                agent = agents.NewTelegramAgent(env)
+            case constants.PROVIDER_SLACK:
+                provider = providers.NewSlackProvider(env)
+            case constants.PROVIDER_GOOGLE:
+                provider = providers.NewGoogleProvider(env)
+            case constants.PROVIDER_TELEGRAM:
+                provider = providers.NewTelegramProvider(env)
+            case constants.PROVIDER_DISCORD:
+                provider = providers.NewDiscordProvider(env)
             default:
-                fmt.Println("No valid provider. Please choose from [slack, google, telegram].")
+                fmt.Println("No valid provider. Please choose from [slack, google, telegram, discord].")
                 return nil
         }
 
         if len(threadId) > 0 {
-            res, _ := agent.Reply(threadId, message)
+            res, _ := provider.Reply(threadId, message)
             if output {
                 fmt.Println(res)
             }
             return nil
         }
-        res, _ := agent.Post(message)
+        res, _ := provider.Post(message)
         if output {
             fmt.Println(res)
         }

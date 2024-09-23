@@ -1,4 +1,4 @@
-package agents
+package providers
 
 import (
 	"fmt"
@@ -9,16 +9,16 @@ import (
 	"github.com/tech-thinker/chatz/config"
 )
 
-type slackAgent struct {
+type slackProvider struct {
     config *config.Config
 }
 
-func (agent *slackAgent) Post(message string) (interface{}, error) {
+func (agent *slackProvider) Post(message string) (interface{}, error) {
     url := "https://slack.com/api/chat.postMessage"
 
 	payloadStr := fmt.Sprintf(
             `{"channel": "%s","text": "%s"}`,
-            agent.config.SlackChannelId, message,
+            agent.config.ChannelId, message,
         )
 
     payload := strings.NewReader(payloadStr)
@@ -27,7 +27,7 @@ func (agent *slackAgent) Post(message string) (interface{}, error) {
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("User-Agent", "tech-thinker/chatz")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", agent.config.SlackToken))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", agent.config.Token))
 
 	res, err := http.DefaultClient.Do(req)
     if err!=nil {
@@ -39,12 +39,12 @@ func (agent *slackAgent) Post(message string) (interface{}, error) {
     return string(body), err
 }
 
-func (agent *slackAgent) Reply(threadId string, message string) (interface{}, error) {
+func (agent *slackProvider) Reply(threadId string, message string) (interface{}, error) {
     url := "https://slack.com/api/chat.postMessage"
 
 	payloadStr := fmt.Sprintf(
             `{"channel": "%s", "text": "%s", "thread_ts": "%s"}`,
-            agent.config.SlackChannelId, message, threadId,
+            agent.config.ChannelId, message, threadId,
         )
 
     payload := strings.NewReader(payloadStr)
@@ -53,7 +53,7 @@ func (agent *slackAgent) Reply(threadId string, message string) (interface{}, er
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("User-Agent", "tech-thinker/chatz")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", agent.config.SlackToken))
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", agent.config.Token))
 
 	res, err := http.DefaultClient.Do(req)
     if err!=nil {
@@ -65,6 +65,6 @@ func (agent *slackAgent) Reply(threadId string, message string) (interface{}, er
     return string(body), err
 }
 
-func NewSlackAgent(config *config.Config) Agent {
-    return &slackAgent{config: config}
+func NewSlackProvider(config *config.Config) Provider {
+    return &slackProvider{config: config}
 }

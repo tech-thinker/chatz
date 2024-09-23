@@ -34,20 +34,18 @@ func LoadEnv(profile string) (*config.Config, error) {
 
     // Get values from the INI file
     provider := viper.GetString(fmt.Sprintf("%s.PROVIDER", profile))
-    slackToken := viper.GetString(fmt.Sprintf("%s.SLACK_TOKEN", profile))
+    slackToken := viper.GetString(fmt.Sprintf("%s.TOKEN", profile))
     channelId := viper.GetString(fmt.Sprintf("%s.CHANNEL_ID", profile))
-    googleWebHookURL := viper.GetString(fmt.Sprintf("%s.WEB_HOOK_URL", profile))
-    telegramBotToken := viper.GetString(fmt.Sprintf("%s.TELEGRAM_BOT_TOKEN", profile))
-    telegramChatId := viper.GetString(fmt.Sprintf("%s.TELEGRAM_CHAT_ID", profile))
+    webHookURL := viper.GetString(fmt.Sprintf("%s.WEB_HOOK_URL", profile))
+    chatId := viper.GetString(fmt.Sprintf("%s.CHAT_ID", profile))
 
 
     var env config.Config
     env.Provider = provider
-    env.SlackToken = slackToken
-    env.SlackChannelId = channelId
-    env.GoogleWebHookURL = googleWebHookURL
-    env.TelegramBotToken = telegramBotToken
-    env.TelegramChatId = telegramChatId
+    env.WebHookURL = webHookURL
+    env.Token = slackToken
+    env.ChannelId = channelId
+    env.ChatId = chatId
 
     return &env, nil
 }
