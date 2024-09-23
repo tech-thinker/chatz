@@ -10,11 +10,11 @@ import (
 	"github.com/tech-thinker/chatz/config"
 )
 
-type discordProvider struct {
+type DiscordProvider struct {
     config *config.Config
 }
 
-func (agent *discordProvider) Post(message string) (interface{}, error) {
+func (agent *DiscordProvider) Post(message string) (interface{}, error) {
     url := agent.config.WebHookURL
 
 	payloadStr := fmt.Sprintf(
@@ -39,11 +39,8 @@ func (agent *discordProvider) Post(message string) (interface{}, error) {
     return string(body), err
 }
 
-func (agent *discordProvider) Reply(threadId string, message string) (interface{}, error) {
+func (agent *DiscordProvider) Reply(threadId string, message string) (interface{}, error) {
     fmt.Println("Reply to discord not supported yet.")
     return nil, errors.New("Reply to discord not supported yet.")
 }
 
-func NewDiscordProvider(config *config.Config) Provider {
-    return &discordProvider{config: config}
-}

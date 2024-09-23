@@ -9,11 +9,11 @@ import (
 	"github.com/tech-thinker/chatz/config"
 )
 
-type googleProvider struct {
+type GoogleProvider struct {
     config *config.Config
 }
 
-func (agent *googleProvider) Post(message string) (interface{}, error) {
+func (agent *GoogleProvider) Post(message string) (interface{}, error) {
     url := agent.config.WebHookURL
 
 	payloadStr := fmt.Sprintf(
@@ -38,7 +38,7 @@ func (agent *googleProvider) Post(message string) (interface{}, error) {
     return string(body), err
 }
 
-func (agent *googleProvider) Reply(threadId string, message string) (interface{}, error) {
+func (agent *GoogleProvider) Reply(threadId string, message string) (interface{}, error) {
     url := fmt.Sprintf("%s&messageReplyOption=REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD",agent.config.WebHookURL)
 
 	payloadStr := fmt.Sprintf(
@@ -63,6 +63,3 @@ func (agent *googleProvider) Reply(threadId string, message string) (interface{}
     return string(body), err
 }
 
-func NewGoogleProvider(config *config.Config) Provider {
-    return &googleProvider{config: config}
-}
