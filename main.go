@@ -21,6 +21,7 @@ func main() {
     var profile string
     var threadId string
     var output bool
+    var fromEnv bool
 
     app := cli.NewApp()
     app.Name = "chatz"
@@ -52,6 +53,12 @@ func main() {
             Usage: "Print the version number",
             Destination: &version,
         },
+        &cli.BoolFlag{
+            Name: "from-env",
+            Aliases: []string{"e"},
+            Usage: "To use config from environment variables",
+            Destination: &fromEnv,
+        },
     }
     app.Action = func(ctx *cli.Context) error {
         if version {
@@ -75,7 +82,7 @@ func main() {
             message = fmt.Sprintf("%s %s",message, a)
         }
         
-        env, err := utils.LoadEnv(profile)
+        env, err := utils.LoadEnv(profile, fromEnv)
         if err!=nil {
             return nil
         }
