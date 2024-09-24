@@ -38,6 +38,7 @@ func LoadEnv(profile string) (*config.Config, error) {
     channelId := viper.GetString(fmt.Sprintf("%s.CHANNEL_ID", profile))
     webHookURL := viper.GetString(fmt.Sprintf("%s.WEB_HOOK_URL", profile))
     chatId := viper.GetString(fmt.Sprintf("%s.CHAT_ID", profile))
+    connectionURL := viper.GetString(fmt.Sprintf("%s.CONNECTION_URL", profile))
 
 
     var env config.Config
@@ -46,6 +47,7 @@ func LoadEnv(profile string) (*config.Config, error) {
     env.Token = slackToken
     env.ChannelId = channelId
     env.ChatId = chatId
+    env.ConnectionURL = connectionURL
 
     return &env, nil
 }

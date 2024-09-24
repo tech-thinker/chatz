@@ -22,6 +22,8 @@ func NewProvider(env *config.Config) (Provider, error) {
             return &TelegramProvider{config: env}, nil
         case constants.PROVIDER_DISCORD:
             return &DiscordProvider{config: env}, nil
+        case constants.PROVIDER_REDIS:
+            return &RedisProvider{config: env}, nil
         default:
             return nil, errors.New("Invalid provider config in ~/.chatz.ini")
     }

@@ -25,6 +25,7 @@ With chatz, you can streamline your notification processes across multiple platf
 - Google Chat: [Read documentation](docs/google.md)
 - Telegram: [Read documentation](docs/telegram.md)
 - Discord: [Read documentation](docs/discord.md)
+- Redis: [Read documentation](docs/redis.md)
 
 ## Installation
 Download and install executable binary from GitHub releases page.
@@ -91,6 +92,14 @@ CHAT_ID=<chat-id>
 [default]
 PROVIDER=discord
 WEB_HOOK_URL=<webhook-url>
+```
+
+- Config for redis provider
+```ini
+[default]
+PROVIDER=redis
+CONNECTION_URL=<redis-connection-url>
+CHANNEL_ID=<redis-publish-channel>
 ```
 
 ## Usage
