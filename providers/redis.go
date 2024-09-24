@@ -36,7 +36,7 @@ func (agent *RedisProvider) Post(message string) (interface{}, error) {
 }
 
 func (agent *RedisProvider) Reply(threadId string, message string) (interface{}, error) {
-    fmt.Println("Reply to discord not supported yet.")
-    return nil, errors.New("Reply to discord not supported yet.")
+    fmt.Println("Reply to redis not supported yet.")
+    return nil, errors.New("Reply to redis not supported yet.")
 }
 
