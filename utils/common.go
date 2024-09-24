@@ -10,7 +10,39 @@ import (
 )
 
 
-func LoadEnv(profile string) (*config.Config, error) {
+func LoadEnv(profile string, fromEnv bool) (*config.Config, error) {
+    if fromEnv {
+        return loadEnvFromSystemEnv()
+    } else {
+        return loadEnvFromFile(profile)
+    }
+}
+
+func loadEnvFromSystemEnv() (*config.Config, error) {
+    v := viper.New()
+    v.AutomaticEnv()
+
+    // Get values from system environment
+    provider := v.GetString("PROVIDER")
+    token := v.GetString("TOKEN")
+    channelId := v.GetString("CHANNEL_ID")
+    webHookURL := v.GetString("WEB_HOOK_URL")
+    chatId := v.GetString("CHAT_ID")
+    connectionURL := v.GetString("CONNECTION_URL")
+
+    var env config.Config
+
+    env.Provider = provider
+    env.WebHookURL = webHookURL
+    env.Token = token
+    env.ChannelId = channelId
+    env.ChatId = chatId
+    env.ConnectionURL = connectionURL
+
+    return &env, nil
+}
+
+func loadEnvFromFile(profile string) (*config.Config, error) {
     // Get the home directory of the user
     homeDir, err := os.UserHomeDir()
     if err != nil {
@@ -34,7 +66,7 @@ func LoadEnv(profile string) (*config.Config, error) {
 
     // Get values from the INI file
     provider := viper.GetString(fmt.Sprintf("%s.PROVIDER", profile))
-    slackToken := viper.GetString(fmt.Sprintf("%s.TOKEN", profile))
+    token := viper.GetString(fmt.Sprintf("%s.TOKEN", profile))
     channelId := viper.GetString(fmt.Sprintf("%s.CHANNEL_ID", profile))
     webHookURL := viper.GetString(fmt.Sprintf("%s.WEB_HOOK_URL", profile))
     chatId := viper.GetString(fmt.Sprintf("%s.CHAT_ID", profile))
@@ -44,7 +76,7 @@ func LoadEnv(profile string) (*config.Config, error) {
     var env config.Config
     env.Provider = provider
     env.WebHookURL = webHookURL
-    env.Token = slackToken
+    env.Token = token
     env.ChannelId = channelId
     env.ChatId = chatId
     env.ConnectionURL = connectionURL

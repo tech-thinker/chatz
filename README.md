@@ -32,21 +32,21 @@ Download and install executable binary from GitHub releases page.
 
 ### Linux Installation
 ```sh
-curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.0/chatz-linux-amd64 -o chatz
+curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.1/chatz-linux-amd64 -o chatz
 chmod +x chatz
 sudo mv chatz /usr/bin
 ```
 
 ### MacOS Installation
 ```sh
-curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.0/chatz-darwin-amd64 -o chatz
+curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.1/chatz-darwin-amd64 -o chatz
 chmod +x chatz
 sudo mv chatz /usr/bin
 ```
 
 ### Windows Installation
 ```sh
-curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.0/chatz-windows-amd64.exe -o chatz.exe
+curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.1/chatz-windows-amd64.exe -o chatz.exe
 chatz.exe
 ```
 
@@ -100,6 +100,16 @@ WEB_HOOK_URL=<webhook-url>
 PROVIDER=redis
 CONNECTION_URL=<redis-connection-url>
 CHANNEL_ID=<redis-publish-channel>
+```
+
+### System Environment Support
+Chatz also support system environment variable. To use system environment variable then use `--from-env` or `-e` flag.
+Name of the environment variable is same as `chatz.ini` config key, for example `export PROVIDER=slack`.
+
+```sh
+chatz -e "Test"
+# Or
+chatz --from-env "Test"
 ```
 
 ## Usage
