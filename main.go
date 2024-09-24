@@ -24,7 +24,7 @@ func main() {
 
     app := cli.NewApp()
     app.Name = "chatz"
-    app.Description = "chatz is a versatile messaging app designed to send notifications to Google Chat, Slack, Discord and Telegram."
+    app.Description = "chatz is a versatile messaging app designed to send notifications to Google Chat, Slack, Discord, Telegram and Redis."
     app.Flags = []cli.Flag {
         &cli.BoolFlag{
             Name: "output",

@@ -7,4 +7,5 @@ type Config struct {
     Token string
     ChannelId string
     ChatId string
+    ConnectionURL string
 }
