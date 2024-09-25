@@ -1,11 +1,11 @@
-VERSION := $(AppVersion)
+VERSION := $(or $(AppVersion), "v1.1.1")
 COMMIT := $(shell git rev-parse --short HEAD)
 BUILDDATE := $(shell date +%Y-%m-%d)
 
 LDFLAGS := -X 'main.AppVersion=$(VERSION)' -X 'main.CommitHash=$(COMMIT)' -X 'main.BuildDate=$(BUILDDATE)'
 
 
-install:
+dep:
 	go mod tidy
 
 test:
@@ -13,6 +13,10 @@ test:
 
 run: build
 	./chatz "This is test."
+
+install: build
+	cp chatz /usr/local/bin/chatz
+	cp man/chatz.1 /usr/local/share/man/man1/chatz.1
 
 build:
 	go build -ldflags="$(LDFLAGS)" -o chatz .

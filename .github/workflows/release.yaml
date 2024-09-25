@@ -28,7 +28,7 @@ jobs:
         echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
     - name: Install dependencies
-      run: make install
+      run: make dep
 
     - name: Build
       run: |
