@@ -1,0 +1,126 @@
+.TH CHATZ 1 "September 25, 2024" "Version 1.1.1" "User Commands"
+.SH NAME
+chatz \- a CLI tool for sending notifications to Google Chat, Slack, Discord, Telegram etc.
+.SH SYNOPSIS
+.B chatz
+.RI [ options ] " message"
+.SH DESCRIPTION
+.B chatz
+is a command-line tool that sends notifications to multiple messaging platforms like Google Chat, Slack, and Telegram. It can be integrated into other programs or background jobs to send notifications based on specific events, such as build completion, job status updates, or error notifications.
+
+The application allows flexibility by using a configuration file to store API credentials, webhooks, and chat IDs. This makes it simple to send notifications with minimal configuration.
+
+To use
+.B chatz,
+configure the relevant services in a `~/.chatz.ini` configuration file located in the user's home directory, or use system environment variables using the `-e` flag.
+
+.SH OPTIONS
+.TP
+.B \-p, \-\-profile
+Profile to use from the configuration file.
+.TP
+.B \-o, \-\-output
+Print output to stdout.
+.TP
+.B \-t, \-\-thread-id
+Thread ID for replies to a message.
+.TP
+.B \-e, \-\-from-env
+Use system environment variables.
+.TP
+.B \-v, \-\-version
+Show the current version of
+.B chatz.
+.TP
+.B \-h, \-\-help
+Display usage information for
+.B chatz.
+
+.SH EXAMPLES
+.TP
+Send a message using default profile:
+.B
+chatz "Simple test message"
+.TP
+Send a message using custom profile:
+.B
+chatz -p custom "Simple test message"
+.TP
+Send a reply to a message:
+.B
+chatz -t <thread_id> "Reply message"
+.TP
+Send message using system environment variables:
+.B
+chatz --from-env "Simple test message"
+.TP
+See output of command:
+.B
+chatz -o "Sample test message"
+
+.SH CONFIGURATION
+The
+.B chatz
+tool uses a configuration file in INI format to store credentials and webhook URLs for different services. The default configuration file is located at
+.I ~/.chatz.ini
+but if doesn't exist, then create it.
+
+Here is an example configuration file:
+
+.TP
+Configuration for Google.
+
+.nf
+[default]
+PROVIDER=google
+WEB_HOOK_URL=<webhook-url>
+.fi
+
+.TP
+Configuration for Slack.
+
+.nf
+[default]
+PROVIDER=slack
+TOKEN=<bot-token>
+CHANNEL_ID=<channel-id>
+.fi
+
+.TP
+Configuration for Telegram.
+
+.nf
+[default]
+PROVIDER=telegram
+TOKEN=<bot-token>
+CHAT_ID=<chat-id>
+.fi
+
+.TP
+Configuration for Discord.
+
+.nf
+[default]
+PROVIDER=discord
+WEB_HOOK_URL=<webhook-url>
+.fi
+
+.TP
+Configuration for Redis.
+
+.nf
+[default]
+PROVIDER=redis
+CONNECTION_URL=<redis-url>
+CHANNEL_ID=<redis-channel>
+.fi
+
+.TP
+Ensure that each service is properly configured with valid tokens and webhook URLs.
+
+.SH SEE ALSO
+.BR vim (1),
+.BR nano (1),
+.SH AUTHOR
+Written by tech-thinker, as part of the `chatz` project.
+
