@@ -14,7 +14,8 @@
 *Chatz* is an open-source application designed to send messages to popular communication platforms like Google Chat, Slack, Discord and Telegram etc. Whether you're monitoring server health, tracking job completions, or needing a quick notification tool, Chatz offers a unified way to communicate with your teams and devices, such as:
 
 - Event Notifications: Automatically notify users of events occurring in background jobs, system processes, or application workflows.
-- Alerts : Integrate with script to alert teams of system status changes, errors, or other critical updates.
+- Alerts: Integrate with script to alert teams of system status changes, errors, or other critical updates.
+- CI/CD Pipeline: Receive notifications when build status changes, pipeline status changes, and other events occur in the CI/CD pipeline. Visit: [Chatz Action](https://github.com/marketplace/actions/chatz-action) to add to your github workflow.
 
 With chatz, you can streamline your notification processes across multiple platforms, making it an essential tool for developers, system administrators, and teams that need reliable communication for automated tasks.
 
