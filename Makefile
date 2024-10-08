@@ -4,6 +4,9 @@ BUILDDATE := $(shell date +%Y-%m-%d)
 
 LDFLAGS := -X 'main.AppVersion=$(VERSION)' -X 'main.CommitHash=$(COMMIT)' -X 'main.BuildDate=$(BUILDDATE)'
 
+PLATFORMS = linux darwin windows
+ARCHITECTURES = amd64 arm64 arm
+
 all: build
 
 dep:
@@ -22,24 +25,17 @@ install: build
 build:
 	go build -ldflags="$(LDFLAGS)" -o chatz .
 
-build-all:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o build/chatz-linux-amd64
-	cp build/chatz-linux-amd64 build/chatz
-	tar -zcvf build/chatz-linux-amd64.tar.gz build/chatz man/chatz.1
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="$(LDFLAGS)" -o build/chatz-linux-arm64
-	cp build/chatz-linux-arm64 build/chatz
-	tar -zcvf build/chatz-linux-arm64.tar.gz build/chatz man/chatz.1
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -ldflags="$(LDFLAGS)" -o build/chatz-linux-arm
-	cp build/chatz-linux-arm build/chatz
-	tar -zcvf build/chatz-linux-arm.tar.gz build/chatz man/chatz.1
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o build/chatz-darwin-amd64
-	cp build/chatz-darwin-amd64 build/chatz
-	tar -zcvf build/chatz-darwin-amd64.tar.gz build/chatz man/chatz.1
-	CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags="$(LDFLAGS)" -o build/chatz-darwin-arm64
-	cp build/chatz-darwin-arm64 build/chatz
-	tar -zcvf build/chatz-darwin-arm64.tar.gz build/chatz man/chatz.1
-	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="$(LDFLAGS)" -o build/chatz-windows-amd64.exe
-	CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -ldflags="$(LDFLAGS)" -o build/chatz-windows-i386.exe
+dist:
+	@for platform in $(PLATFORMS); do \
+		for arch in $(ARCHITECTURES); do \
+			extension=""; if [ "$$platform" = "windows" ]; then extension=".exe"; fi; \
+            CGO_ENABLED=0 GOOS=$$platform GOARCH=$$arch go build -ldflags="$(LDFLAGS)" -o build/chatz-$$platform-$$arch$$extension; \
+			if [ ! -f build/chatz-$$platform-$$arch ]; then continue; fi; \
+			if [ "$$platform" = "windows" ]; then continue; fi; \
+			cp build/chatz-$$platform-$$arch build/chatz; \
+			tar -zcvf build/chatz-$$platform-$$arch.tar.gz build/chatz man/chatz.1; \
+        done \
+	done
 	rm build/chatz
 
 clean:

@@ -3,6 +3,7 @@ module github.com/tech-thinker/chatz
 go 1.23.0
 
 require (
+	github.com/redis/go-redis/v9 v9.6.1
 	github.com/spf13/viper v1.19.0
 	github.com/urfave/cli/v2 v2.27.4
 )
@@ -16,7 +17,6 @@ require (
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
-	github.com/redis/go-redis/v9 v9.6.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect

@@ -40,21 +40,21 @@ brew install chatz
 
 ### Linux Installation
 ```sh
-curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.2/chatz-linux-amd64 -o chatz
+curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.3/chatz-linux-amd64 -o chatz
 chmod +x chatz
 sudo mv chatz /usr/bin
 ```
 
 ### MacOS Installation
 ```sh
-curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.2/chatz-darwin-amd64 -o chatz
+curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.3/chatz-darwin-amd64 -o chatz
 chmod +x chatz
 sudo mv chatz /usr/bin
 ```
 
 ### Windows Installation
 ```sh
-curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.2/chatz-windows-amd64.exe -o chatz.exe
+curl -sL https://github.com/tech-thinker/chatz/releases/download/v1.1.3/chatz-windows-amd64.exe -o chatz.exe
 chatz.exe
 ```
 
