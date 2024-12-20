@@ -27,6 +27,7 @@ With chatz, you can streamline your notification processes across multiple platf
 - Telegram: [Read documentation](docs/telegram.md)
 - Discord: [Read documentation](docs/discord.md)
 - Redis: [Read documentation](docs/redis.md)
+- SMTP: [Read documentation](docs/smtp.md)
 
 ## Installation
 Download and install executable binary from GitHub releases page.
@@ -111,6 +112,47 @@ WEB_HOOK_URL=<webhook-url>
 PROVIDER=redis
 CONNECTION_URL=<redis-connection-url>
 CHANNEL_ID=<redis-publish-channel>
+```
+
+- Config for smtp provider with TLS
+```ini
+[default]
+PROVIDER=smtp
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USE_TLS=true
+SMTP_USER=<yourmailid@gmail.com>
+SMTP_PASSWORD=<app-password>
+SMTP_SUBJECT=<Your subject>
+SMTP_FROM=<from-mail@gmail.com>
+SMTP_TO=<user1@gmail.com,user1@gmail.com>
+```
+
+- Config for smtp provider with STARTTLS
+```ini
+[default]
+PROVIDER=smtp
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USE_STARTTLS=true
+SMTP_USER=<yourmailid@gmail.com>
+SMTP_PASSWORD=<app-password>
+SMTP_SUBJECT=<Your subject>
+SMTP_FROM=<from-mail@gmail.com>
+SMTP_TO=<user1@gmail.com,user1@gmail.com>
+```
+
+- Config for smtp provider without encryption
+```ini
+[default]
+PROVIDER=smtp
+SMTP_HOST=smtp.yourmailserver.com
+SMTP_PORT=25
+SMTP_USER=<yourmailid@yourmailserver.com>
+SMTP_PASSWORD=<app-password>
+SMTP_SUBJECT=<Your subject>
+SMTP_FROM=<from-mail@yourmailserver.com>
+SMTP_TO=<user1@gmail.com,user1@gmail.com>
 ```
 
 ### System Environment Support

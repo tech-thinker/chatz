@@ -116,6 +116,22 @@ CHANNEL_ID=<redis-channel>
 .fi
 
 .TP
+Configuration for SMTP.
+
+.nf
+[default]
+PROVIDER=smtp
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USE_STARTTLS=true
+SMTP_USER=<yourmailid@gmail.com>
+SMTP_PASSWORD=<app-password>
+SMTP_SUBJECT=<Your subject>
+SMTP_FROM=<from-mail@gmail.com>
+SMTP_TO=<user1@gmail.com,user1@gmail.com>
+.fi
+
+.TP
 Ensure that each service is properly configured with valid tokens and webhook URLs.
 
 .SH SEE ALSO
