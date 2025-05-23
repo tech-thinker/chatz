@@ -3,7 +3,7 @@ module github.com/tech-thinker/chatz
 go 1.23.0
 
 require (
-	github.com/redis/go-redis/v9 v9.6.1
+	github.com/redis/go-redis/v9 v9.6.3
 	github.com/spf13/viper v1.19.0
 	github.com/urfave/cli/v2 v2.27.4
 )
