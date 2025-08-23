@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/tech-thinker/chatz/models"
 	"github.com/tech-thinker/chatz/providers"
 	"github.com/tech-thinker/chatz/utils"
 	"github.com/urfave/cli/v2"
@@ -106,31 +107,21 @@ func main() {
 			return nil
 		}
 
+		option := models.Option{
+			Title:    &subject,
+			Subject:  &subject,
+			Priority: &priority,
+		}
+
 		if len(threadId) > 0 {
-			res, _ := provider.Reply(threadId, message)
+			res, _ := provider.Reply(threadId, message, option)
 			if output {
 				fmt.Println(res)
 			}
 			return nil
 		}
 
-		if gotifyProvider, ok := provider.(*providers.GotifyProvider); ok {
-			res, err := gotifyProvider.PostWithTitleAndPriority(message, subject, priority)
-			if output {
-				fmt.Println(res)
-			}
-			return err
-		}
-
-		if smtpProvider, ok := provider.(*providers.SMTPProvider); ok {
-			res, err := smtpProvider.PostWithSubject(message, subject)
-			if output {
-				fmt.Println(res)
-			}
-			return err
-		}
-
-		res, err := provider.Post(message)
+		res, err := provider.Post(message, option)
 		if output {
 			fmt.Println(res)
 		}

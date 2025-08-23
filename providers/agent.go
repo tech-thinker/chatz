@@ -5,11 +5,12 @@ import (
 
 	"github.com/tech-thinker/chatz/config"
 	"github.com/tech-thinker/chatz/constants"
+	"github.com/tech-thinker/chatz/models"
 )
 
 type Provider interface {
-	Post(message string) (interface{}, error)
-	Reply(threadId string, message string) (interface{}, error)
+	Post(message string, option models.Option) (any, error)
+	Reply(threadId string, message string, option models.Option) (any, error)
 }
 
 func NewProvider(env *config.Config) (Provider, error) {

@@ -8,31 +8,38 @@ import (
 	"strings"
 
 	"github.com/tech-thinker/chatz/config"
+	"github.com/tech-thinker/chatz/models"
+	"github.com/tech-thinker/chatz/utils"
 )
 
 type GotifyProvider struct {
 	config *config.Config
 }
 
-func (agent *GotifyProvider) Post(message string) (interface{}, error) {
-	return agent.PostWithTitleAndPriority(message, agent.config.GotifyTitle, agent.config.GotifyPriority)
-}
+func (agent *GotifyProvider) Post(message string, option models.Option) (any, error) {
+	if option.Title == nil {
+		if len(agent.config.GotifyTitle) > 0 {
+			option.Title = &agent.config.GotifyTitle
+		} else {
+			option.Title = utils.NewString("Chatz Notification")
+		}
+	}
 
-func (agent *GotifyProvider) PostWithTitleAndPriority(message string, title string, priority int) (interface{}, error) {
+	if option.Priority == nil {
+		if agent.config.GotifyPriority > 0 {
+			option.Priority = utils.NewInt(agent.config.GotifyPriority)
+		} else {
+			option.Priority = utils.NewInt(5)
+		}
+	}
+
 	url := fmt.Sprintf("%s/message", agent.config.GotifyURL)
-
-	if len(title) == 0 {
-		title = "Chatz Notification"
-	}
-	if priority == 0 {
-		priority = 5
-	}
 
 	payloadStr := fmt.Sprintf(
 		`{"message": "%s", "priority": %d, "title": "%s"}`,
 		message,
-		priority,
-		title,
+		*option.Priority,
+		*option.Title,
 	)
 
 	payload := strings.NewReader(payloadStr)
@@ -53,7 +60,7 @@ func (agent *GotifyProvider) PostWithTitleAndPriority(message string, title stri
 	return string(body), err
 }
 
-func (agent *GotifyProvider) Reply(threadId string, message string) (interface{}, error) {
+func (agent *GotifyProvider) Reply(threadId string, message string, option models.Option) (any, error) {
 	fmt.Println("Reply to gotify not supported yet.")
 	return nil, errors.New("reply to gotify not supported yet")
 }
