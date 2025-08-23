@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/tech-thinker/chatz/config"
+	"github.com/tech-thinker/chatz/constants"
 	"github.com/tech-thinker/chatz/models"
 )
 
@@ -43,4 +44,13 @@ func (agent *DiscordProvider) Post(message string, option models.Option) (any, e
 func (agent *DiscordProvider) Reply(threadId string, message string, option models.Option) (any, error) {
 	fmt.Println("Reply to discord not supported yet.")
 	return nil, errors.New("Reply to discord not supported yet.")
+}
+
+func (agent *DiscordProvider) setup(env *config.Config) error {
+	agent.config = env
+	return nil
+}
+
+func init() {
+	RegisterProvider(constants.PROVIDER_DISCORD, new(DiscordProvider))
 }

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/tech-thinker/chatz/config"
+	"github.com/tech-thinker/chatz/constants"
 	"github.com/tech-thinker/chatz/models"
 )
 
@@ -62,4 +63,13 @@ func (agent *GoogleProvider) Reply(threadId string, message string, option model
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
 	return string(body), err
+}
+
+func (agent *GoogleProvider) setup(env *config.Config) error {
+	agent.config = env
+	return nil
+}
+
+func init() {
+	RegisterProvider(constants.PROVIDER_GOOGLE, new(GoogleProvider))
 }

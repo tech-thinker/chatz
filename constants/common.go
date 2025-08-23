@@ -1,11 +1,13 @@
 package constants
 
+type ProviderType string
+
 const (
-	PROVIDER_SLACK    = "slack"
-	PROVIDER_DISCORD  = "discord"
-	PROVIDER_TELEGRAM = "telegram"
-	PROVIDER_GOOGLE   = "google"
-	PROVIDER_REDIS    = "redis"
-	PROVIDER_SMTP     = "smtp"
-	PROVIDER_GOTIFY   = "gotify"
+	PROVIDER_SLACK    ProviderType = "slack"
+	PROVIDER_DISCORD  ProviderType = "discord"
+	PROVIDER_TELEGRAM ProviderType = "telegram"
+	PROVIDER_GOOGLE   ProviderType = "google"
+	PROVIDER_REDIS    ProviderType = "redis"
+	PROVIDER_SMTP     ProviderType = "smtp"
+	PROVIDER_GOTIFY   ProviderType = "gotify"
 )

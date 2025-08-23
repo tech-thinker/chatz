@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/tech-thinker/chatz/config"
+	"github.com/tech-thinker/chatz/constants"
 	"github.com/tech-thinker/chatz/models"
 	"github.com/tech-thinker/chatz/utils"
 )
@@ -144,4 +145,13 @@ func sendEmail(client *smtp.Client, from string, to []string, msg []byte) (any, 
 func (agent *SMTPProvider) Reply(threadId string, message string, option models.Option) (any, error) {
 	fmt.Println("Reply to SMTP not supported yet.")
 	return nil, errors.New("Reply to SMTP not supported yet.")
+}
+
+func (agent *SMTPProvider) setup(env *config.Config) error {
+	agent.config = env
+	return nil
+}
+
+func init() {
+	RegisterProvider(constants.PROVIDER_SMTP, new(SMTPProvider))
 }
