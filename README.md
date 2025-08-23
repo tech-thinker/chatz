@@ -28,6 +28,7 @@ With chatz, you can streamline your notification processes across multiple platf
 - Discord: [Read documentation](docs/discord.md)
 - Redis: [Read documentation](docs/redis.md)
 - SMTP: [Read documentation](docs/smtp.md)
+- Gotify: [Read documentation](docs/gotify.md)
 
 ## Installation
 Download and install executable binary from GitHub releases page.

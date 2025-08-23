@@ -9,20 +9,29 @@ import (
 	"strings"
 
 	"github.com/tech-thinker/chatz/config"
+	"github.com/tech-thinker/chatz/models"
+	"github.com/tech-thinker/chatz/utils"
 )
 
 type SMTPProvider struct {
 	config *config.Config
 }
 
-func (agent *SMTPProvider) Post(message string) (interface{}, error) {
+func (agent *SMTPProvider) Post(message string, option models.Option) (any, error) {
 	host := agent.config.SMTPHost
 	port := agent.config.SMTPPort
 	smtpServer := fmt.Sprintf("%s:%s", host, port)
 	user := agent.config.SMTPUser
 	password := agent.config.SMTPPassword
 
-	subject := agent.config.SMTPSubject
+	if option.Subject == nil {
+		if len(agent.config.SMTPSubject) > 0 {
+			option.Subject = &agent.config.SMTPSubject
+		} else {
+			option.Subject = utils.NewString("Chatz Notification")
+		}
+	}
+
 	from := agent.config.SMTPFrom
 	recipients := agent.config.SMTPTo
 
@@ -30,14 +39,10 @@ func (agent *SMTPProvider) Post(message string) (interface{}, error) {
 		from = user
 	}
 
-	if len(subject) == 0 {
-		subject = "Chatz Notification"
-	}
-
 	// Create the message with proper headers
 	msg := []byte(fmt.Sprintf(
 		"From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s",
-		from, recipients, subject, message,
+		from, recipients, *option.Subject, message,
 	))
 
 	// Split recipients into a slice
@@ -108,7 +113,7 @@ func (agent *SMTPProvider) Post(message string) (interface{}, error) {
 }
 
 // Helper function to send email
-func sendEmail(client *smtp.Client, from string, to []string, msg []byte) (interface{}, error) {
+func sendEmail(client *smtp.Client, from string, to []string, msg []byte) (any, error) {
 	// Set the sender and recipients
 	if err := client.Mail(from); err != nil {
 		return nil, fmt.Errorf("failed to set sender: %w", err)
@@ -136,7 +141,7 @@ func sendEmail(client *smtp.Client, from string, to []string, msg []byte) (inter
 	return `{"status": "success"}`, nil
 }
 
-func (agent *SMTPProvider) Reply(threadId string, message string) (interface{}, error) {
+func (agent *SMTPProvider) Reply(threadId string, message string, option models.Option) (any, error) {
 	fmt.Println("Reply to SMTP not supported yet.")
 	return nil, errors.New("Reply to SMTP not supported yet.")
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/tech-thinker/chatz/models"
 	"github.com/tech-thinker/chatz/providers"
 	"github.com/tech-thinker/chatz/utils"
 	"github.com/urfave/cli/v2"
@@ -22,6 +23,8 @@ func main() {
 	var threadId string
 	var output bool
 	var fromEnv bool
+	var subject string
+	var priority int
 
 	app := cli.NewApp()
 	app.Name = "chatz"
@@ -59,6 +62,18 @@ func main() {
 			Usage:       "To use config from environment variables",
 			Destination: &fromEnv,
 		},
+		&cli.StringFlag{
+			Name:        "subject",
+			Aliases:     []string{"s"},
+			Usage:       "Subject for provider which supports subject or title",
+			Destination: &subject,
+		},
+		&cli.IntFlag{
+			Name:        "priority",
+			Aliases:     []string{"pr"},
+			Usage:       "Priority for gotify notification",
+			Destination: &priority,
+		},
 	}
 	app.Action = func(ctx *cli.Context) error {
 		if version {
@@ -92,14 +107,21 @@ func main() {
 			return nil
 		}
 
+		option := models.Option{
+			Title:    &subject,
+			Subject:  &subject,
+			Priority: &priority,
+		}
+
 		if len(threadId) > 0 {
-			res, _ := provider.Reply(threadId, message)
+			res, _ := provider.Reply(threadId, message, option)
 			if output {
 				fmt.Println(res)
 			}
 			return nil
 		}
-		res, err := provider.Post(message)
+
+		res, err := provider.Post(message, option)
 		if output {
 			fmt.Println(res)
 		}

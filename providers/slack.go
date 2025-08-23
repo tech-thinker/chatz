@@ -7,21 +7,22 @@ import (
 	"strings"
 
 	"github.com/tech-thinker/chatz/config"
+	"github.com/tech-thinker/chatz/models"
 )
 
 type SlackProvider struct {
-    config *config.Config
+	config *config.Config
 }
 
-func (agent *SlackProvider) Post(message string) (interface{}, error) {
-    url := "https://slack.com/api/chat.postMessage"
+func (agent *SlackProvider) Post(message string, option models.Option) (any, error) {
+	url := "https://slack.com/api/chat.postMessage"
 
 	payloadStr := fmt.Sprintf(
-            `{"channel": "%s","text": "%s"}`,
-            agent.config.ChannelId, message,
-        )
+		`{"channel": "%s","text": "%s"}`,
+		agent.config.ChannelId, message,
+	)
 
-    payload := strings.NewReader(payloadStr)
+	payload := strings.NewReader(payloadStr)
 
 	req, _ := http.NewRequest("POST", url, payload)
 
@@ -30,24 +31,24 @@ func (agent *SlackProvider) Post(message string) (interface{}, error) {
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", agent.config.Token))
 
 	res, err := http.DefaultClient.Do(req)
-    if err!=nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
-    return string(body), err
+	return string(body), err
 }
 
-func (agent *SlackProvider) Reply(threadId string, message string) (interface{}, error) {
-    url := "https://slack.com/api/chat.postMessage"
+func (agent *SlackProvider) Reply(threadId string, message string, option models.Option) (any, error) {
+	url := "https://slack.com/api/chat.postMessage"
 
 	payloadStr := fmt.Sprintf(
-            `{"channel": "%s", "text": "%s", "thread_ts": "%s"}`,
-            agent.config.ChannelId, message, threadId,
-        )
+		`{"channel": "%s", "text": "%s", "thread_ts": "%s"}`,
+		agent.config.ChannelId, message, threadId,
+	)
 
-    payload := strings.NewReader(payloadStr)
+	payload := strings.NewReader(payloadStr)
 
 	req, _ := http.NewRequest("POST", url, payload)
 
@@ -56,12 +57,11 @@ func (agent *SlackProvider) Reply(threadId string, message string) (interface{},
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", agent.config.Token))
 
 	res, err := http.DefaultClient.Do(req)
-    if err!=nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
-    return string(body), err
+	return string(body), err
 }
-

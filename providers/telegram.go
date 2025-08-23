@@ -7,24 +7,25 @@ import (
 	"strings"
 
 	"github.com/tech-thinker/chatz/config"
+	"github.com/tech-thinker/chatz/models"
 )
 
 type TelegramProvider struct {
-    config *config.Config
+	config *config.Config
 }
 
-func (agent *TelegramProvider) Post(message string) (interface{}, error) {
-    url := fmt.Sprintf(
-        `https://api.telegram.org/bot%s/sendMessage`,
-        agent.config.Token,
-        )
+func (agent *TelegramProvider) Post(message string, option models.Option) (any, error) {
+	url := fmt.Sprintf(
+		`https://api.telegram.org/bot%s/sendMessage`,
+		agent.config.Token,
+	)
 
 	payloadStr := fmt.Sprintf(
-            `{"chat_id": "%s","text": "%s"}`,
-            agent.config.ChatId, message,
-        )
+		`{"chat_id": "%s","text": "%s"}`,
+		agent.config.ChatId, message,
+	)
 
-    payload := strings.NewReader(payloadStr)
+	payload := strings.NewReader(payloadStr)
 
 	req, _ := http.NewRequest("POST", url, payload)
 
@@ -32,27 +33,27 @@ func (agent *TelegramProvider) Post(message string) (interface{}, error) {
 	req.Header.Add("User-Agent", "tech-thinker/chatz")
 
 	res, err := http.DefaultClient.Do(req)
-    if err!=nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
-    return string(body), err
+	return string(body), err
 }
 
-func (agent *TelegramProvider) Reply(threadId string, message string) (interface{}, error) {
-    url := fmt.Sprintf(
-        `https://api.telegram.org/bot%s/sendMessage`,
-        agent.config.Token,
-        )
+func (agent *TelegramProvider) Reply(threadId string, message string, option models.Option) (any, error) {
+	url := fmt.Sprintf(
+		`https://api.telegram.org/bot%s/sendMessage`,
+		agent.config.Token,
+	)
 
 	payloadStr := fmt.Sprintf(
-            `{"chat_id": "%s", "text": "%s", "reply_to_message_id": "%s"}`,
-            agent.config.ChatId, message, threadId,
-        )
+		`{"chat_id": "%s", "text": "%s", "reply_to_message_id": "%s"}`,
+		agent.config.ChatId, message, threadId,
+	)
 
-    payload := strings.NewReader(payloadStr)
+	payload := strings.NewReader(payloadStr)
 
 	req, _ := http.NewRequest("POST", url, payload)
 
@@ -60,11 +61,11 @@ func (agent *TelegramProvider) Reply(threadId string, message string) (interface
 	req.Header.Add("User-Agent", "tech-thinker/chatz")
 
 	res, err := http.DefaultClient.Do(req)
-    if err!=nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
-    return string(body), err
+	return string(body), err
 }
