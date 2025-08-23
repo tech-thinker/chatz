@@ -39,6 +39,8 @@ func loadEnvFromSystemEnv() (*config.Config, error) {
 	smtpTo := v.GetString("SMTP_TO")
 	gotifyURL := v.GetString("GOTIFY_URL")
 	gotifyToken := v.GetString("GOTIFY_TOKEN")
+	gotifyTitle := v.GetString("GOTIFY_TITLE")
+	gotifyPriority := v.GetInt("GOTIFY_PRIORITY")
 
 	var env config.Config
 
@@ -59,6 +61,8 @@ func loadEnvFromSystemEnv() (*config.Config, error) {
 	env.SMTPTo = smtpTo
 	env.GotifyURL = gotifyURL
 	env.GotifyToken = gotifyToken
+	env.GotifyTitle = gotifyTitle
+	env.GotifyPriority = gotifyPriority
 
 	return &env, nil
 }
@@ -105,6 +109,8 @@ func loadEnvFromFile(profile string) (*config.Config, error) {
 
 	gotifyURL := viper.GetString(fmt.Sprintf("%s.GOTIFY_URL", profile))
 	gotifyToken := viper.GetString(fmt.Sprintf("%s.GOTIFY_TOKEN", profile))
+	gotifyTitle := viper.GetString(fmt.Sprintf("%s.GOTIFY_TITLE", profile))
+	gotifyPriority := viper.GetInt(fmt.Sprintf("%s.GOTIFY_PRIORITY", profile))
 
 	var env config.Config
 	env.Provider = provider
@@ -124,6 +130,8 @@ func loadEnvFromFile(profile string) (*config.Config, error) {
 	env.SMTPTo = smtpTo
 	env.GotifyURL = gotifyURL
 	env.GotifyToken = gotifyToken
+	env.GotifyTitle = gotifyTitle
+	env.GotifyPriority = gotifyPriority
 
 	return &env, nil
 }

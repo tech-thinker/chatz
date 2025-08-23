@@ -16,13 +16,19 @@ type SMTPProvider struct {
 }
 
 func (agent *SMTPProvider) Post(message string) (interface{}, error) {
+	return agent.PostWithSubject(message, "")
+}
+
+func (agent *SMTPProvider) PostWithSubject(message string, subject string) (interface{}, error) {
 	host := agent.config.SMTPHost
 	port := agent.config.SMTPPort
 	smtpServer := fmt.Sprintf("%s:%s", host, port)
 	user := agent.config.SMTPUser
 	password := agent.config.SMTPPassword
 
-	subject := agent.config.SMTPSubject
+	if len(subject) == 0 {
+		subject = agent.config.SMTPSubject
+	}
 	from := agent.config.SMTPFrom
 	recipients := agent.config.SMTPTo
 

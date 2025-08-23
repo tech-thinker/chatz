@@ -22,7 +22,7 @@ func main() {
 	var threadId string
 	var output bool
 	var fromEnv bool
-	var title string
+	var subject string
 	var priority int
 
 	app := cli.NewApp()
@@ -62,10 +62,10 @@ func main() {
 			Destination: &fromEnv,
 		},
 		&cli.StringFlag{
-			Name:        "title",
-			Aliases:     []string{"ti"},
-			Usage:       "Title for gotify notification",
-			Destination: &title,
+			Name:        "subject",
+			Aliases:     []string{"s"},
+			Usage:       "Subject for provider which supports subject or title",
+			Destination: &subject,
 		},
 		&cli.IntFlag{
 			Name:        "priority",
@@ -115,7 +115,15 @@ func main() {
 		}
 
 		if gotifyProvider, ok := provider.(*providers.GotifyProvider); ok {
-			res, err := gotifyProvider.PostWithPriority(message, title, priority)
+			res, err := gotifyProvider.PostWithTitleAndPriority(message, subject, priority)
+			if output {
+				fmt.Println(res)
+			}
+			return err
+		}
+
+		if smtpProvider, ok := provider.(*providers.SMTPProvider); ok {
+			res, err := smtpProvider.PostWithSubject(message, subject)
 			if output {
 				fmt.Println(res)
 			}

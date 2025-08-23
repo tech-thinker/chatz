@@ -22,6 +22,8 @@ Add the following section to your `~/.chatz.ini` file:
 PROVIDER=gotify
 GOTIFY_URL=<your-gotify-server-url>
 GOTIFY_TOKEN=<your-gotify-app-token>
+GOTIFY_TITLE=<your-gotify-title>
+GOTIFY_PRIORITY=<your-gotify-priority>
 ```
 
 ### Using Environment Variables
@@ -32,6 +34,8 @@ Set the following environment variables:
 export PROVIDER=gotify
 export GOTIFY_URL=<your-gotify-server-url>
 export GOTIFY_TOKEN=<your-gotify-app-token>
+export GOTIFY_TITLE=<your-gotify-title>
+export GOTIFY_PRIORITY=<your-gotify-priority>
 ```
 
 ## 3. Send a Test Notification
@@ -43,3 +47,13 @@ chatz --profile=gotify "Hello from Chatz!"
 ```
 
 You should receive a notification on your Gotify server.
+
+### Using CLI Flags
+
+You can also override the title and priority using CLI flags:
+
+```sh
+chatz --profile=gotify --subject "Custom Title" --priority 7 "Hello from Chatz!"
+```
+
+This will send a notification with "Custom Title" as the title and a priority of 7.

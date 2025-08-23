@@ -15,10 +15,10 @@ type GotifyProvider struct {
 }
 
 func (agent *GotifyProvider) Post(message string) (interface{}, error) {
-	return agent.PostWithPriority(message, "", 0)
+	return agent.PostWithTitleAndPriority(message, agent.config.GotifyTitle, agent.config.GotifyPriority)
 }
 
-func (agent *GotifyProvider) PostWithPriority(message string, title string, priority int) (interface{}, error) {
+func (agent *GotifyProvider) PostWithTitleAndPriority(message string, title string, priority int) (interface{}, error) {
 	url := fmt.Sprintf("%s/message", agent.config.GotifyURL)
 
 	if len(title) == 0 {
