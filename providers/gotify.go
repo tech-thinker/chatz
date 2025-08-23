@@ -15,11 +15,24 @@ type GotifyProvider struct {
 }
 
 func (agent *GotifyProvider) Post(message string) (interface{}, error) {
+	return agent.PostWithPriority(message, "", 0)
+}
+
+func (agent *GotifyProvider) PostWithPriority(message string, title string, priority int) (interface{}, error) {
 	url := fmt.Sprintf("%s/message", agent.config.GotifyURL)
 
+	if len(title) == 0 {
+		title = "Chatz Notification"
+	}
+	if priority == 0 {
+		priority = 5
+	}
+
 	payloadStr := fmt.Sprintf(
-		`{"message": "%s", "priority": 5, "title": "Chatz Notification"}`,
+		`{"message": "%s", "priority": %d, "title": "%s"}`,
 		message,
+		priority,
+		title,
 	)
 
 	payload := strings.NewReader(payloadStr)

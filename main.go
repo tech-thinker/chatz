@@ -22,6 +22,8 @@ func main() {
 	var threadId string
 	var output bool
 	var fromEnv bool
+	var title string
+	var priority int
 
 	app := cli.NewApp()
 	app.Name = "chatz"
@@ -58,6 +60,18 @@ func main() {
 			Aliases:     []string{"e"},
 			Usage:       "To use config from environment variables",
 			Destination: &fromEnv,
+		},
+		&cli.StringFlag{
+			Name:        "title",
+			Aliases:     []string{"ti"},
+			Usage:       "Title for gotify notification",
+			Destination: &title,
+		},
+		&cli.IntFlag{
+			Name:        "priority",
+			Aliases:     []string{"pr"},
+			Usage:       "Priority for gotify notification",
+			Destination: &priority,
 		},
 	}
 	app.Action = func(ctx *cli.Context) error {
@@ -99,6 +113,15 @@ func main() {
 			}
 			return nil
 		}
+
+		if gotifyProvider, ok := provider.(*providers.GotifyProvider); ok {
+			res, err := gotifyProvider.PostWithPriority(message, title, priority)
+			if output {
+				fmt.Println(res)
+			}
+			return err
+		}
+
 		res, err := provider.Post(message)
 		if output {
 			fmt.Println(res)
