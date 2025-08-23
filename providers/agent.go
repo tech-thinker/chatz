@@ -26,6 +26,8 @@ func NewProvider(env *config.Config) (Provider, error) {
 		return &RedisProvider{config: env}, nil
 	case constants.PROVIDER_SMTP:
 		return &SMTPProvider{config: env}, nil
+	case constants.PROVIDER_GOTIFY:
+		return &GotifyProvider{config: env}, nil
 	default:
 		return nil, errors.New("Invalid provider config in ~/.chatz.ini")
 	}

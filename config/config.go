@@ -17,4 +17,6 @@ type Config struct {
 	SMTPSubject   string
 	SMTPFrom      string
 	SMTPTo        string
+	GotifyURL     string
+	GotifyToken   string
 }

@@ -37,6 +37,8 @@ func loadEnvFromSystemEnv() (*config.Config, error) {
 	smtpSubject := v.GetString("SMTP_SUBJECT")
 	smtpFrom := v.GetString("SMTP_FROM")
 	smtpTo := v.GetString("SMTP_TO")
+	gotifyURL := v.GetString("GOTIFY_URL")
+	gotifyToken := v.GetString("GOTIFY_TOKEN")
 
 	var env config.Config
 
@@ -55,6 +57,8 @@ func loadEnvFromSystemEnv() (*config.Config, error) {
 	env.SMTPSubject = smtpSubject
 	env.SMTPFrom = smtpFrom
 	env.SMTPTo = smtpTo
+	env.GotifyURL = gotifyURL
+	env.GotifyToken = gotifyToken
 
 	return &env, nil
 }
@@ -99,6 +103,9 @@ func loadEnvFromFile(profile string) (*config.Config, error) {
 	smtpFrom := viper.GetString(fmt.Sprintf("%s.SMTP_FROM", profile))
 	smtpTo := viper.GetString(fmt.Sprintf("%s.SMTP_TO", profile))
 
+	gotifyURL := viper.GetString(fmt.Sprintf("%s.GOTIFY_URL", profile))
+	gotifyToken := viper.GetString(fmt.Sprintf("%s.GOTIFY_TOKEN", profile))
+
 	var env config.Config
 	env.Provider = provider
 	env.WebHookURL = webHookURL
@@ -115,6 +122,8 @@ func loadEnvFromFile(profile string) (*config.Config, error) {
 	env.SMTPSubject = smtpSubject
 	env.SMTPFrom = smtpFrom
 	env.SMTPTo = smtpTo
+	env.GotifyURL = gotifyURL
+	env.GotifyToken = gotifyToken
 
 	return &env, nil
 }

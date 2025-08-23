@@ -7,4 +7,5 @@ const (
 	PROVIDER_GOOGLE   = "google"
 	PROVIDER_REDIS    = "redis"
 	PROVIDER_SMTP     = "smtp"
+	PROVIDER_GOTIFY   = "gotify"
 )
