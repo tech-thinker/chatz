@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/tech-thinker/chatz/config"
+	"github.com/tech-thinker/chatz/constants"
 	"github.com/tech-thinker/chatz/models"
 	"github.com/tech-thinker/chatz/utils"
 )
@@ -63,4 +64,13 @@ func (agent *GotifyProvider) Post(message string, option models.Option) (any, er
 func (agent *GotifyProvider) Reply(threadId string, message string, option models.Option) (any, error) {
 	fmt.Println("Reply to gotify not supported yet.")
 	return nil, errors.New("reply to gotify not supported yet")
+}
+
+func (agent *GotifyProvider) setup(env *config.Config) error {
+	agent.config = env
+	return nil
+}
+
+func init() {
+	RegisterProvider(constants.PROVIDER_GOTIFY, new(GotifyProvider))
 }

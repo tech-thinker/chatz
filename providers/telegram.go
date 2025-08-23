@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/tech-thinker/chatz/config"
+	"github.com/tech-thinker/chatz/constants"
 	"github.com/tech-thinker/chatz/models"
 )
 
@@ -68,4 +69,13 @@ func (agent *TelegramProvider) Reply(threadId string, message string, option mod
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
 	return string(body), err
+}
+
+func (agent *TelegramProvider) setup(env *config.Config) error {
+	agent.config = env
+	return nil
+}
+
+func init() {
+	RegisterProvider(constants.PROVIDER_TELEGRAM, new(TelegramProvider))
 }

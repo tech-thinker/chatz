@@ -8,29 +8,25 @@ import (
 	"github.com/tech-thinker/chatz/models"
 )
 
+var providerRegistry = make(map[constants.ProviderType]Provider)
+
 type Provider interface {
+	setup(env *config.Config) error
 	Post(message string, option models.Option) (any, error)
 	Reply(threadId string, message string, option models.Option) (any, error)
 }
 
-func NewProvider(env *config.Config) (Provider, error) {
-	switch env.Provider {
-	case constants.PROVIDER_SLACK:
-		return &SlackProvider{config: env}, nil
-	case constants.PROVIDER_GOOGLE:
-		return &GoogleProvider{config: env}, nil
-	case constants.PROVIDER_TELEGRAM:
-		return &TelegramProvider{config: env}, nil
-	case constants.PROVIDER_DISCORD:
-		return &DiscordProvider{config: env}, nil
-	case constants.PROVIDER_REDIS:
-		return &RedisProvider{config: env}, nil
-	case constants.PROVIDER_SMTP:
-		return &SMTPProvider{config: env}, nil
-	case constants.PROVIDER_GOTIFY:
-		return &GotifyProvider{config: env}, nil
-	default:
-		return nil, errors.New("Invalid provider config in ~/.chatz.ini")
-	}
+func RegisterProvider(providerType constants.ProviderType, provider Provider) {
+	providerRegistry[providerType] = provider
+}
 
+func NewProvider(config *config.Config) (Provider, error) {
+	if provider, ok := providerRegistry[constants.ProviderType(config.Provider)]; ok {
+		err := provider.setup(config)
+		if err != nil {
+			return nil, err
+		}
+		return provider, nil
+	}
+	return nil, errors.New("Invalid provider config in ~/.chatz.ini")
 }
