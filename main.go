@@ -107,10 +107,15 @@ func main() {
 			return nil
 		}
 
-		option := models.Option{
-			Title:    &subject,
-			Subject:  &subject,
-			Priority: &priority,
+		option := models.Option{}
+
+		if ctx.IsSet("subject") {
+			option.Title = &subject
+			option.Subject = &subject
+		}
+
+		if ctx.IsSet("priority") {
+			option.Priority = &priority
 		}
 
 		if len(threadId) > 0 {
