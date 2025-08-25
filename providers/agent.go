@@ -28,5 +28,5 @@ func NewProvider(config *config.Config) (Provider, error) {
 		}
 		return provider, nil
 	}
-	return nil, errors.New("Invalid provider config in ~/.chatz.ini")
+	return nil, errors.New("Invalid PROVIDER in Config/Environment.")
 }
