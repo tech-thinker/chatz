@@ -1,5 +1,6 @@
 package constants
 
+// ProviderType represents the type of messaging provider.
 type ProviderType string
 
 const (

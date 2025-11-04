@@ -9,6 +9,7 @@ import (
 	"github.com/tech-thinker/chatz/config"
 )
 
+// LoadEnv loads configuration from environment variables or config file.
 func LoadEnv(profile string, fromEnv bool) (*config.Config, error) {
 	if fromEnv {
 		return loadEnvFromSystemEnv()
@@ -17,6 +18,7 @@ func LoadEnv(profile string, fromEnv bool) (*config.Config, error) {
 	}
 }
 
+// loadEnvFromSystemEnv loads configuration from system environment variables.
 func loadEnvFromSystemEnv() (*config.Config, error) {
 	v := viper.New()
 	v.AutomaticEnv()
@@ -67,6 +69,7 @@ func loadEnvFromSystemEnv() (*config.Config, error) {
 	return &env, nil
 }
 
+// loadEnvFromFile loads configuration from the .chatz.ini file in the user's home directory.
 func loadEnvFromFile(profile string) (*config.Config, error) {
 	// Get the home directory of the user
 	homeDir, err := os.UserHomeDir()
