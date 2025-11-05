@@ -148,6 +148,27 @@ func (agent *SMTPProvider) Reply(threadId string, message string, option models.
 }
 
 func (agent *SMTPProvider) setup(env *config.Config) error {
+	if env == nil {
+		return fmt.Errorf("config is required")
+	}
+	if env.SMTPHost == "" {
+		return fmt.Errorf("smtp_host is required for SMTP provider")
+	}
+	if env.SMTPPort == "" {
+		return fmt.Errorf("smtp_port is required for SMTP provider")
+	}
+	if env.SMTPUser == "" {
+		return fmt.Errorf("smtp_user is required for SMTP provider")
+	}
+	if env.SMTPPassword == "" {
+		return fmt.Errorf("smtp_password is required for SMTP provider")
+	}
+	if env.SMTPFrom == "" && env.SMTPUser == "" {
+		return fmt.Errorf("smtp_from or smtp_user is required for SMTP provider")
+	}
+	if env.SMTPTo == "" {
+		return fmt.Errorf("smtp_to is required for SMTP provider")
+	}
 	agent.config = env
 	return nil
 }

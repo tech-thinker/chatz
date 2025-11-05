@@ -72,6 +72,15 @@ func (agent *TelegramProvider) Reply(threadId string, message string, option mod
 }
 
 func (agent *TelegramProvider) setup(env *config.Config) error {
+	if env == nil {
+		return fmt.Errorf("config is required")
+	}
+	if env.Token == "" {
+		return fmt.Errorf("token is required for Telegram provider")
+	}
+	if env.ChatId == "" {
+		return fmt.Errorf("chat_id is required for Telegram provider")
+	}
 	agent.config = env
 	return nil
 }

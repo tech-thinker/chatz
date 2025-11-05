@@ -47,6 +47,12 @@ func (agent *DiscordProvider) Reply(threadId string, message string, option mode
 }
 
 func (agent *DiscordProvider) setup(env *config.Config) error {
+	if env == nil {
+		return fmt.Errorf("config is required")
+	}
+	if env.WebHookURL == "" {
+		return fmt.Errorf("webhook_url is required for Discord provider")
+	}
 	agent.config = env
 	return nil
 }

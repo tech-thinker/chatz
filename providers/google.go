@@ -66,6 +66,12 @@ func (agent *GoogleProvider) Reply(threadId string, message string, option model
 }
 
 func (agent *GoogleProvider) setup(env *config.Config) error {
+	if env == nil {
+		return fmt.Errorf("config is required")
+	}
+	if env.WebHookURL == "" {
+		return fmt.Errorf("webhook_url is required for Google provider")
+	}
 	agent.config = env
 	return nil
 }
