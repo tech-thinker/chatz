@@ -1,6 +1,6 @@
 package config
 
-// Environment
+// Config holds all configuration settings for chatz providers.
 type Config struct {
 	Provider       string
 	WebHookURL     string
