@@ -67,6 +67,15 @@ func (agent *GotifyProvider) Reply(threadId string, message string, option model
 }
 
 func (agent *GotifyProvider) setup(env *config.Config) error {
+	if env == nil {
+		return fmt.Errorf("config is required")
+	}
+	if env.GotifyURL == "" {
+		return fmt.Errorf("gotify_url is required for Gotify provider")
+	}
+	if env.GotifyToken == "" {
+		return fmt.Errorf("gotify_token is required for Gotify provider")
+	}
 	agent.config = env
 	return nil
 }

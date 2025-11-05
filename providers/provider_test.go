@@ -224,30 +224,38 @@ func TestSlackProvider_Reply(t *testing.T) {
 func TestNewProvider(t *testing.T) {
 	tests := []struct {
 		name        string
-		provider    string
+		config      *config.Config
 		expectError bool
 	}{
 		{
-			name:        "valid slack provider",
-			provider:    "slack",
-			expectError: false, // Slack provider should be registered
-		},
-		{
-			name:        "valid discord provider",
-			provider:    "discord",
+			name: "valid slack provider",
+			config: &config.Config{
+				Provider:  "slack",
+				Token:     "test-token",
+				ChannelId: "C1234567890",
+			},
 			expectError: false,
 		},
 		{
-			name:        "invalid provider",
-			provider:    "invalid",
+			name: "valid discord provider",
+			config: &config.Config{
+				Provider:   "discord",
+				WebHookURL: "https://discord.com/api/webhooks/test",
+			},
+			expectError: false,
+		},
+		{
+			name: "invalid provider",
+			config: &config.Config{
+				Provider: "invalid",
+			},
 			expectError: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cfg := &config.Config{Provider: tt.provider}
-			provider, err := NewProvider(cfg)
+			provider, err := NewProvider(tt.config)
 
 			if tt.expectError {
 				if err == nil {
@@ -385,24 +393,24 @@ func TestSlackProvider_Setup(t *testing.T) {
 			config: &config.Config{
 				ChannelId: "C1234567890",
 			},
-			expectError: false, // Slack provider doesn't validate config in setup
+			expectError: true,
 		},
 		{
 			name: "missing channel",
 			config: &config.Config{
 				Token: "test-token",
 			},
-			expectError: false, // Slack provider doesn't validate config in setup
+			expectError: true,
 		},
 		{
 			name:        "nil config",
 			config:      nil,
-			expectError: false, // Slack provider doesn't validate config in setup
+			expectError: true,
 		},
 		{
 			name:        "empty config",
 			config:      &config.Config{},
-			expectError: false,
+			expectError: true,
 		},
 	}
 
@@ -419,6 +427,308 @@ func TestSlackProvider_Setup(t *testing.T) {
 			}
 
 			// Verify config was set (unless nil config)
+			if !tt.expectError && tt.config != nil && provider.config != tt.config {
+				t.Error("config was not set properly")
+			}
+		})
+	}
+}
+
+func TestDiscordProvider_Post(t *testing.T) {
+	tests := []struct {
+		name               string
+		message            string
+		mockResponse       interface{}
+		mockStatusCode     int
+		expectError        bool
+		mockTransportError error
+	}{
+		{
+			name:           "successful post",
+			message:        "test message",
+			mockResponse:   `{"ok": true}`,
+			mockStatusCode: http.StatusOK,
+			expectError:    false,
+		},
+		{
+			name:           "discord api error",
+			message:        "test message",
+			mockResponse:   `{"message": "Invalid webhook"}`,
+			mockStatusCode: http.StatusBadRequest,
+			expectError:    false, // HTTP call succeeds, but API returns error
+		},
+		{
+			name:               "network connection error",
+			message:            "test message",
+			mockTransportError: &http.ProtocolError{ErrorString: "connection refused"},
+			expectError:        true,
+		},
+		{
+			name:           "empty message",
+			message:        "",
+			mockResponse:   `{"ok": true}`,
+			mockStatusCode: http.StatusOK,
+			expectError:    false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockTransport := &MockTransport{
+				RoundTripFunc: func(req *http.Request) (*http.Response, error) {
+					if tt.mockTransportError != nil {
+						return nil, tt.mockTransportError
+					}
+
+					if tt.name != "network connection error" {
+						if req.Method != "POST" {
+							t.Errorf("expected POST request, got %s", req.Method)
+						}
+						if req.Header.Get("Content-Type") != "application/json" {
+							t.Errorf("expected application/json, got %s", req.Header.Get("Content-Type"))
+						}
+					}
+
+					var body bytes.Buffer
+					if tt.mockResponse != nil {
+						switch resp := tt.mockResponse.(type) {
+						case string:
+							body.WriteString(resp)
+						}
+					}
+
+					return &http.Response{
+						StatusCode: tt.mockStatusCode,
+						Body:       io.NopCloser(&body),
+						Header:     make(http.Header),
+					}, nil
+				},
+			}
+
+			originalClient := http.DefaultClient
+			http.DefaultClient = &http.Client{Transport: mockTransport}
+			defer func() { http.DefaultClient = originalClient }()
+
+			cfg := &config.Config{
+				WebHookURL: "https://discord.com/api/webhooks/test",
+			}
+			provider := &DiscordProvider{config: cfg}
+
+			option := models.Option{}
+			result, err := provider.Post(tt.message, option)
+
+			if tt.expectError {
+				if err == nil {
+					t.Error("expected error but got none")
+				}
+			} else {
+				if err != nil {
+					t.Errorf("unexpected error: %v", err)
+				}
+				if result == nil {
+					t.Error("expected result but got nil")
+				}
+			}
+		})
+	}
+}
+
+func TestDiscordProvider_Setup(t *testing.T) {
+	tests := []struct {
+		name        string
+		config      *config.Config
+		expectError bool
+	}{
+		{
+			name: "valid discord config",
+			config: &config.Config{
+				WebHookURL: "https://discord.com/api/webhooks/test",
+			},
+			expectError: false,
+		},
+		{
+			name:        "missing webhook url",
+			config:      &config.Config{},
+			expectError: true,
+		},
+		{
+			name:        "nil config",
+			config:      nil,
+			expectError: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			provider := &DiscordProvider{}
+			err := provider.setup(tt.config)
+
+			if tt.expectError && err == nil {
+				t.Error("expected error but got none")
+			}
+			if !tt.expectError && err != nil {
+				t.Errorf("unexpected error: %v", err)
+			}
+
+			if !tt.expectError && tt.config != nil && provider.config != tt.config {
+				t.Error("config was not set properly")
+			}
+		})
+	}
+}
+
+func TestTelegramProvider_Post(t *testing.T) {
+	tests := []struct {
+		name               string
+		message            string
+		mockResponse       interface{}
+		mockStatusCode     int
+		expectError        bool
+		mockTransportError error
+	}{
+		{
+			name:           "successful post",
+			message:        "test message",
+			mockResponse:   `{"ok": true}`,
+			mockStatusCode: http.StatusOK,
+			expectError:    false,
+		},
+		{
+			name:           "telegram api error",
+			message:        "test message",
+			mockResponse:   `{"ok": false, "description": "Bad Request"}`,
+			mockStatusCode: http.StatusOK,
+			expectError:    false,
+		},
+		{
+			name:               "network connection error",
+			message:            "test message",
+			mockTransportError: &http.ProtocolError{ErrorString: "connection refused"},
+			expectError:        true,
+		},
+		{
+			name:           "empty message",
+			message:        "",
+			mockResponse:   `{"ok": true}`,
+			mockStatusCode: http.StatusOK,
+			expectError:    false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockTransport := &MockTransport{
+				RoundTripFunc: func(req *http.Request) (*http.Response, error) {
+					if tt.mockTransportError != nil {
+						return nil, tt.mockTransportError
+					}
+
+					if tt.name != "network connection error" {
+						if req.Method != "POST" {
+							t.Errorf("expected POST request, got %s", req.Method)
+						}
+						if req.Header.Get("Content-Type") != "application/json" {
+							t.Errorf("expected application/json, got %s", req.Header.Get("Content-Type"))
+						}
+					}
+
+					var body bytes.Buffer
+					if tt.mockResponse != nil {
+						switch resp := tt.mockResponse.(type) {
+						case string:
+							body.WriteString(resp)
+						}
+					}
+
+					return &http.Response{
+						StatusCode: tt.mockStatusCode,
+						Body:       io.NopCloser(&body),
+						Header:     make(http.Header),
+					}, nil
+				},
+			}
+
+			originalClient := http.DefaultClient
+			http.DefaultClient = &http.Client{Transport: mockTransport}
+			defer func() { http.DefaultClient = originalClient }()
+
+			cfg := &config.Config{
+				Token:  "test-token",
+				ChatId: "123456789",
+			}
+			provider := &TelegramProvider{config: cfg}
+
+			option := models.Option{}
+			result, err := provider.Post(tt.message, option)
+
+			if tt.expectError {
+				if err == nil {
+					t.Error("expected error but got none")
+				}
+			} else {
+				if err != nil {
+					t.Errorf("unexpected error: %v", err)
+				}
+				if result == nil {
+					t.Error("expected result but got nil")
+				}
+			}
+		})
+	}
+}
+
+func TestTelegramProvider_Setup(t *testing.T) {
+	tests := []struct {
+		name        string
+		config      *config.Config
+		expectError bool
+	}{
+		{
+			name: "valid telegram config",
+			config: &config.Config{
+				Token:  "test-token",
+				ChatId: "123456789",
+			},
+			expectError: false,
+		},
+		{
+			name: "missing token",
+			config: &config.Config{
+				ChatId: "123456789",
+			},
+			expectError: true,
+		},
+		{
+			name: "missing chat id",
+			config: &config.Config{
+				Token: "test-token",
+			},
+			expectError: true,
+		},
+		{
+			name:        "nil config",
+			config:      nil,
+			expectError: true,
+		},
+		{
+			name:        "empty config",
+			config:      &config.Config{},
+			expectError: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			provider := &TelegramProvider{}
+			err := provider.setup(tt.config)
+
+			if tt.expectError && err == nil {
+				t.Error("expected error but got none")
+			}
+			if !tt.expectError && err != nil {
+				t.Errorf("unexpected error: %v", err)
+			}
+
 			if !tt.expectError && tt.config != nil && provider.config != tt.config {
 				t.Error("config was not set properly")
 			}
