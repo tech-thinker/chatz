@@ -43,6 +43,15 @@ func (agent *RedisProvider) Reply(threadId string, message string, option models
 }
 
 func (agent *RedisProvider) setup(env *config.Config) error {
+	if env == nil {
+		return fmt.Errorf("config is required")
+	}
+	if env.ConnectionURL == "" {
+		return fmt.Errorf("connection_url is required for Redis provider")
+	}
+	if env.ChannelId == "" {
+		return fmt.Errorf("channel_id is required for Redis provider")
+	}
 	agent.config = env
 	return nil
 }

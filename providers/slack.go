@@ -68,6 +68,15 @@ func (agent *SlackProvider) Reply(threadId string, message string, option models
 }
 
 func (agent *SlackProvider) setup(env *config.Config) error {
+	if env == nil {
+		return fmt.Errorf("config is required")
+	}
+	if env.Token == "" {
+		return fmt.Errorf("token is required for Slack provider")
+	}
+	if env.ChannelId == "" {
+		return fmt.Errorf("channel_id is required for Slack provider")
+	}
 	agent.config = env
 	return nil
 }
